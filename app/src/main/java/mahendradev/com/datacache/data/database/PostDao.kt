@@ -11,7 +11,7 @@ import androidx.room.Query
 @Dao
 interface PostDao {
 
-    @Query("SELECT * from post")
+    @Query("SELECT * from post ORDER BY title ASC")
     fun getAllTitle(): List<Post>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
