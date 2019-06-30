@@ -18,17 +18,16 @@ class PostListPresenter(private val appRepoInterface: AppRepoInterface) : PostLi
         Log.d("Post presenter","load repo")
         appRepoInterface.getPosts(
             {
-                //view.showProgressDialog(false)
-                //view.loadPostsSuccess(it as MutableList<Posts>)
                 if (it.isNotEmpty()){
                     Log.d("Post presenter","api post dataSize" + it.size)
                     insertToDB(it as MutableList<Post>)
-
+                    view.showProgressDialog(false)
+                    view.loadPostsSuccess(it)
                 }
             },{
                 Log.d("Post presenter","api error")
-                //view.showProgressDialog(false)
-                //view.showErrorMessage(it.getErrorMessage())
+                view.showProgressDialog(false)
+                view.showErrorMessage(it.getErrorMessage())
             }
         ).also {
             if (it != null){
@@ -45,7 +44,7 @@ class PostListPresenter(private val appRepoInterface: AppRepoInterface) : PostLi
         }
     }
 
-    override fun showPost() {
+    override fun showPostDB() {
         appRepoInterface.getPostDB {
             if (it.isNotEmpty()){
                 view.showProgressDialog(false)

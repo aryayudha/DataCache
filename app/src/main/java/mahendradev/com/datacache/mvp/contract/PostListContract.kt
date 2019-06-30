@@ -15,7 +15,7 @@ class PostListContract {
 
     interface Presenter: BaseContract.Presenter<View> {
         fun loadPosts()
-        fun showPost()
+        fun showPostDB()
         //fun queryPost()
     }
 

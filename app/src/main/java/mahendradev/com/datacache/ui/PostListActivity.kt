@@ -87,14 +87,20 @@ class PostListActivity : AppCompatActivity(),
             postAdapter.addData(posts)
             pullToRefresh.visibility = View.GONE
         }else{
-            Log.e("post fragment","load post null or error")
+            Log.e("Postlist act","load post null or error")
         }
     }
 
     private fun loadListPost(){//gak guna
         swipeLayout.isRefreshing = false
-        showProgressDialog(true)
-        presenter.showPost()
+        if (isConnected){
+            showProgressDialog(true)
+            presenter.loadPosts()
+        }else{
+            showProgressDialog(true)
+            presenter.loadPosts()
+            presenter.showPostDB()
+        }
     }
 
     override fun itemDetail(tittle: String, body: String) {

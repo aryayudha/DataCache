@@ -28,7 +28,7 @@ class AppRepo(
             .subscribeWith(
                 ApiDisposable<List<Post>>({
                     success(it)
-                    Log.d("Post AppRepo","getPosts : $it")
+                    Log.d("Post AppRepo","getPosts API: $it")
                 }
                     ,failure
                 )
@@ -51,7 +51,7 @@ class AppRepo(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe{
                 success(it)
-                Log.d("Post AppRepo","get post : $it")
+                Log.d("Post AppRepo","get post DB: $it")
             }
 
 //    override fun queryPostDB(success: (LiveData<List<Post>>) -> Unit): Disposable =
