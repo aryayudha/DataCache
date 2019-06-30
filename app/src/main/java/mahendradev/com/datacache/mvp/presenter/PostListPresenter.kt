@@ -18,7 +18,7 @@ class PostListPresenter(private val appRepoInterface: AppRepoInterface) : PostLi
         Log.d("Post presenter","load repo")
         appRepoInterface.getPosts(
             {
-                // view.showProgressDialog(false)
+                //view.showProgressDialog(false)
                 //view.loadPostsSuccess(it as MutableList<Posts>)
                 if (it.isNotEmpty()){
                     Log.d("Post presenter","api post dataSize" + it.size)
@@ -62,6 +62,16 @@ class PostListPresenter(private val appRepoInterface: AppRepoInterface) : PostLi
         }
     }
 
+//    override fun queryPost() {
+//        appRepoInterface.queryPostDB {
+//            //if (it.value!!.isNotEmpty()){
+//                Log.d("nilai","getPostDB succes" + it.value.toString())
+//            //}
+//        }.also { if (it != null){
+//            subscriptions.add(it)
+//        }
+//        }
+//    }
     override fun subscribe() {
 
     }

@@ -1,6 +1,7 @@
 package mahendradev.com.datacache.data.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -20,7 +21,6 @@ class AppRepo(
 ): AppRepoInterface {
 
     override fun getPosts(success: (List<Post>) -> Unit, failure: (ApiError) -> Unit): Disposable {
-        Log.d("Post AppRepo","getPosts")
         return apiService
             .getPostList()
             .subscribeOn(Schedulers.io())
@@ -28,6 +28,7 @@ class AppRepo(
             .subscribeWith(
                 ApiDisposable<List<Post>>({
                     success(it)
+                    Log.d("Post AppRepo","getPosts : $it")
                 }
                     ,failure
                 )
@@ -52,5 +53,15 @@ class AppRepo(
                 success(it)
                 Log.d("Post AppRepo","get post : $it")
             }
+
+//    override fun queryPostDB(success: (LiveData<List<Post>>) -> Unit): Disposable =
+//        Observable.fromCallable {
+//            database.postsDao().queryTitle("ad")
+//        }.subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe{
+//                success(it)
+//                Log.d("Post AppRepo","query post : $it")
+//            }
 
 }

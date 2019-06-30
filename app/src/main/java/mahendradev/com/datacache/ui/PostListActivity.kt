@@ -1,5 +1,6 @@
 package mahendradev.com.datacache.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -18,16 +19,17 @@ import mahendradev.com.datacache.di.module.ActivityModule
 import mahendradev.com.datacache.di.module.AppModule
 import mahendradev.com.datacache.di.module.DataModule
 import mahendradev.com.datacache.mvp.contract.PostListContract
+import java.util.*
 import javax.inject.Inject
 
-class PostListActivity : AppCompatActivity(), PostListContract.View {
-
+class PostListActivity : AppCompatActivity(),
+    PostListContract.View, PostAdapter.OnItemClickListener {
 
     @Inject lateinit var presenter: PostListContract.Presenter
     private var isConnected = false
     private lateinit var searchView: SearchView
-    private val postAdapter: PostAdapter = PostAdapter(arrayListOf())
-    //private val postDB: PostDatabase? = null
+    private val postAdapter: PostAdapter = PostAdapter(arrayListOf(),this)
+    var dataPost = mutableListOf<Post>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +46,7 @@ class PostListActivity : AppCompatActivity(), PostListContract.View {
             //refresh()
             loadListPost()
             Log.e("Post Act", "refresh")
-            swipeLayout.isRefreshing = false
+            //swipeLayout.isRefreshing = false
         }
         loadListPost()
     }
@@ -80,7 +82,8 @@ class PostListActivity : AppCompatActivity(), PostListContract.View {
         rvListPost.adapter = postAdapter
 
         if (posts.isNotEmpty()){
-            Log.e("post list act","load post success" + posts.size)
+            Log.e("Postlist act","load post success" + posts.size)
+            dataPost = posts
             postAdapter.addData(posts)
             pullToRefresh.visibility = View.GONE
         }else{
@@ -88,18 +91,18 @@ class PostListActivity : AppCompatActivity(), PostListContract.View {
         }
     }
 
-    private fun loadListPost(){
-        if (isConnected){
-            showProgressDialog(true)
-            Log.d("nilai","connect")
-            //presenter.loadPosts()
-        }else{
-            showProgressDialog(true)
-            presenter.showPost()
-            Log.d("nilai","offline")
-        }
+    private fun loadListPost(){//gak guna
+        swipeLayout.isRefreshing = false
+        showProgressDialog(true)
+        presenter.showPost()
     }
 
+    override fun itemDetail(tittle: String, body: String) {
+        val intent = Intent(this, PostDetailActivity::class.java)
+        intent.putExtra("title",tittle)
+        intent.putExtra("body", body)
+        startActivity(intent)
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
@@ -110,14 +113,33 @@ class PostListActivity : AppCompatActivity(), PostListContract.View {
         searchView.queryHint = "Search by title"
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String): Boolean {
-                Log.d("nilai","text : $newText" )
+                Log.d("Post activity","text : $newText" )
+                myFilter(newText)
                 return true
             }
             override fun onQueryTextSubmit(query: String): Boolean {
-                Log.d("nilai","text submit : $query" )
+                Log.d("Post activity","text submit : $query" )
+                myFilter(query)
                 return true
             }
         })
         return super.onCreateOptionsMenu(menu)
+    }
+
+
+    fun myFilter(searchKey: String) {
+        val listFiltered = mutableListOf<Post>()
+        val newSearchKey = searchKey.toLowerCase()
+        if (searchKey.isNotEmpty()) {
+            for (i in 0 until dataPost.size-1) {
+                val valuePerIndex = dataPost[i]
+                Log.e("valuePerIndex : ", "$valuePerIndex")
+                val titlePerIndex = valuePerIndex.title
+                if (titlePerIndex.toLowerCase(Locale.getDefault()).contains(newSearchKey)) {
+                    listFiltered.add(valuePerIndex)
+                }
+            }
+            postAdapter.addData(listFiltered)
+        }
     }
 }

@@ -1,5 +1,6 @@
 package mahendradev.com.datacache.data.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -17,6 +18,6 @@ interface PostDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertData(post: Post)
 
-//    @Query("SELECT * from posts WHERE title LIKE : query")
-//    fun searchTitle(query: String)
+    @Query("SELECT * from post WHERE title LIKE:query ")
+    fun queryTitle(query: String): LiveData<List<Post>>
 }

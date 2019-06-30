@@ -13,7 +13,6 @@ import retrofit2.http.GET
 interface ApiService {
 
     @GET("posts")
-    //fun getPostList(): Observable<List<PostDto>>
     fun getPostList(): Observable<List<Post>>
 
     companion object {

@@ -1,5 +1,6 @@
 package mahendradev.com.datacache.data.repository
 
+import androidx.lifecycle.LiveData
 import io.reactivex.disposables.Disposable
 import mahendradev.com.datacache.api.ApiError
 import mahendradev.com.datacache.data.database.Post
@@ -16,6 +17,7 @@ interface AppRepoInterface {
 
     fun insertPost(posts: Post): Disposable
 
-    //    fun getPostDB(list: MutableLiveData<List<Posts>>): Disposable
     fun getPostDB(success: (List<Post>) -> Unit): Disposable
+
+    //fun queryPostDB(success: (LiveData<List<Post>>) -> Unit): Disposable
 }
